@@ -71,13 +71,8 @@ type ColumnConfig struct {
 }
 
 func (c ColumnConfig) getWidthMaxEnforcer() WidthEnforcer {
-	if c.WidthMax <= 0 {
-		return widthEnforcerNone
-	}
-	if c.WidthMaxEnforcer != nil {
-		return c.WidthMaxEnforcer
-	}
-	return text.WrapText
+	_ = "STUB: not implemented"
+	return *new(WidthEnforcer)
 }
 
 // RowConfig contains configurations that determine and modify the way the
@@ -96,8 +91,6 @@ type RowConfig struct {
 }
 
 func (rc RowConfig) getAutoMergeAlign() text.Align {
-	if rc.AutoMergeAlign == text.AlignDefault {
-		return text.AlignCenter
-	}
-	return rc.AutoMergeAlign
+	_ = "STUB: not implemented"
+	return *new(text.Align)
 }

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"math/rand"
-	"strings"
 	"time"
 
 	"github.com/jedib0t/go-pretty/v6/progress"
@@ -45,152 +44,29 @@ var (
 
 // customTrackerDeterminateRenderer creates a progress bar using rainbow colors for determinate progress
 func customTrackerDeterminateRenderer(value int64, total int64, maxLen int) string {
-	progress := float64(value) / float64(total)
-	completed := int(progress * float64(maxLen))
-
-	var result strings.Builder
-	for i := 0; i < maxLen; i++ {
-		if i < completed {
-			// Use rainbow colors based on position in the progress bar
-			colorIdx := (i * 6) / maxLen // Map position to 6 rainbow colors
-			colors := []text.Color{
-				text.FgRed,
-				text.FgYellow,
-				text.FgGreen,
-				text.FgCyan,
-				text.FgBlue,
-				text.FgMagenta,
-			}
-			if colorIdx >= len(colors) {
-				colorIdx = len(colors) - 1
-			}
-			result.WriteString(colors[colorIdx].Sprint("█"))
-		} else {
-			result.WriteString(text.FgHiBlack.Sprint("░"))
-		}
-	}
-
-	return result.String()
+	_ = "STUB: not implemented"
+	return ""
 }
+
+// Use rainbow colors based on position in the progress bar
+// Map position to 6 rainbow colors
 
 // customTrackerIndeterminateRenderer creates a progress bar using rotating rainbow colors for indeterminate progress
 func customTrackerIndeterminateRenderer(maxLen int) string {
+	_ = "STUB: not implemented"
 	// For indeterminate progress, use rotating rainbow colors
-	colors := []text.Color{
-		text.FgRed,
-		text.FgYellow,
-		text.FgGreen,
-		text.FgCyan,
-		text.FgBlue,
-		text.FgMagenta,
-	}
-	idx := int(time.Now().UnixNano()/100000000) % len(colors)
-	return colors[idx].Sprint(strings.Repeat("█", maxLen))
+	return ""
 }
 
-func getMessage(idx int64, units *progress.Units) string {
-	var message string
-	switch units {
-	case &progress.UnitsBytes:
-		message = fmt.Sprintf("Downloading File    #%3d", idx)
-	case &progress.UnitsCurrencyDollar, &progress.UnitsCurrencyEuro, &progress.UnitsCurrencyPound:
-		message = fmt.Sprintf("Transferring Amount #%3d", idx)
-	default:
-		message = fmt.Sprintf("Calculating Total   #%3d", idx)
-	}
-	return message
-}
+func getMessage(idx int64, units *progress.Units) string { _ = "STUB: not implemented"; return "" }
 
-func getSortBy() progress.SortBy {
-	switch *flagSortBy {
-	case "none":
-		return progress.SortByNone
-	case "index":
-		return progress.SortByIndex
-	case "index-dsc":
-		return progress.SortByIndexDsc
-	case "message":
-		return progress.SortByMessage
-	case "message-dsc":
-		return progress.SortByMessageDsc
-	case "percent":
-		return progress.SortByPercent
-	case "percent-dsc":
-		return progress.SortByPercentDsc
-	case "value":
-		return progress.SortByValue
-	case "value-dsc":
-		return progress.SortByValueDsc
-	default:
-		return progress.SortByPercentDsc
-	}
-}
+func getSortBy() progress.SortBy { _ = "STUB: not implemented"; return *new(progress.SortBy) }
 
-func getUnits(idx int64) *progress.Units {
-	var units *progress.Units
-	switch {
-	case idx%5 == 0:
-		units = &progress.UnitsCurrencyPound
-	case idx%4 == 0:
-		units = &progress.UnitsCurrencyDollar
-	case idx%3 == 0:
-		units = &progress.UnitsBytes
-	default:
-		units = &progress.UnitsDefault
-	}
-	return units
-}
+func getUnits(idx int64) *progress.Units { _ = "STUB: not implemented"; return nil }
 
 func trackSomething(pw progress.Writer, idx int64, updateMessage bool) {
-	total := idx * idx * idx * 250
-	incrementPerCycle := idx * int64(*flagNumTrackers) * 250
-
-	units := getUnits(idx)
-	message := getMessage(idx, units)
-	tracker := progress.Tracker{
-		DeferStart:         *flagRandomDefer && rng.Float64() < 0.5,
-		Index:              uint64(idx),
-		Message:            message,
-		RemoveOnCompletion: *flagRandomRemove && rng.Float64() < 0.25,
-		Total:              total,
-		Units:              *units,
-	}
-	if idx == int64(*flagNumTrackers) {
-		tracker.Total = 0
-	}
-
-	pw.AppendTracker(&tracker)
-
-	if tracker.DeferStart {
-		time.Sleep(3 * time.Second)
-		tracker.Start()
-	}
-
-	ticker := time.Tick(time.Millisecond * 500)
-	updateTicker := time.Tick(time.Millisecond * 250)
-	for !tracker.IsDone() {
-		select {
-		case <-ticker:
-			tracker.Increment(incrementPerCycle)
-			if idx == int64(*flagNumTrackers) && tracker.Value() >= total {
-				tracker.MarkAsDone()
-			} else if *flagRandomFail && rand.Float64() < 0.1 {
-				tracker.MarkAsErrored()
-			}
-			pw.SetPinnedMessages(
-				fmt.Sprintf(">> Current Time: %-32s", time.Now().Format(time.RFC3339)),
-				fmt.Sprintf(">>   Total Time: %-32s", time.Since(timeStart).Round(time.Millisecond)),
-			)
-		case <-updateTicker:
-			if updateMessage {
-				rndIdx := rand.Intn(len(messageColors))
-				if rndIdx == len(messageColors) {
-					rndIdx--
-				}
-				tracker.UpdateMessage(messageColors[rndIdx].Sprint(message))
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

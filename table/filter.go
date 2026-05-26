@@ -1,12 +1,5 @@
 package table
 
-import (
-	"fmt"
-	"regexp"
-	"strconv"
-	"strings"
-)
-
 // FilterBy defines what to filter (Column Name or Number), how to filter (Operator),
 // and the value to compare against.
 type FilterBy struct {
@@ -75,176 +68,64 @@ const (
 )
 
 func (t *Table) parseFilterBy(filterBy []FilterBy) []FilterBy {
-	var resFilterBy []FilterBy
-	for _, filter := range filterBy {
-		colNum := 0
-		if filter.Number > 0 && filter.Number <= t.numColumns {
-			colNum = filter.Number
-		} else if filter.Name != "" && len(t.rowsHeaderRaw) > 0 {
-			// Parse from raw header rows
-			for idx, colName := range t.rowsHeaderRaw[0] {
-				if fmt.Sprint(colName) == filter.Name {
-					colNum = idx + 1
-					break
-				}
-			}
-		}
-		if colNum > 0 {
-			resFilterBy = append(resFilterBy, FilterBy{
-				Name:         filter.Name,
-				Number:       colNum,
-				Operator:     filter.Operator,
-				Value:        filter.Value,
-				IgnoreCase:   filter.IgnoreCase,
-				CustomFilter: filter.CustomFilter,
-			})
-		}
-	}
-	return resFilterBy
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// Parse from raw header rows
+
 func (t *Table) matchesFiltersRaw(row Row, filters []FilterBy) bool {
+	_ = "STUB: not implemented"
 	// All filters must match (AND logic)
-	for _, filter := range filters {
-		if !t.matchesFilterRaw(row, filter) {
-			return false
-		}
-	}
-	return true
+	return false
 }
 
 func (t *Table) matchesFilterRaw(row Row, filter FilterBy) bool {
-	colIdx := filter.Number - 1
-	if colIdx < 0 || colIdx >= len(row) {
-		return false
-	}
-
-	cellValue := row[colIdx]
-	cellValueStr := fmt.Sprint(cellValue)
-
-	// Use custom filter if provided
-	if filter.CustomFilter != nil {
-		return filter.CustomFilter(cellValueStr)
-	}
-
-	// Use operator-based filtering
-	return t.matchesOperator(cellValueStr, filter)
+	_ = "STUB: not implemented"
+	return false
 }
 
+// Use custom filter if provided
+
+// Use operator-based filtering
+
 func (t *Table) matchesOperator(cellValue string, filter FilterBy) bool {
-	switch filter.Operator {
-	case Equal:
-		return t.compareEqual(cellValue, filter.Value, filter.IgnoreCase)
-	case NotEqual:
-		return !t.compareEqual(cellValue, filter.Value, filter.IgnoreCase)
-	case GreaterThan:
-		return t.compareNumeric(cellValue, filter.Value, func(a, b float64) bool { return a > b })
-	case GreaterThanOrEqual:
-		return t.compareNumeric(cellValue, filter.Value, func(a, b float64) bool { return a >= b })
-	case LessThan:
-		return t.compareNumeric(cellValue, filter.Value, func(a, b float64) bool { return a < b })
-	case LessThanOrEqual:
-		return t.compareNumeric(cellValue, filter.Value, func(a, b float64) bool { return a <= b })
-	case Contains:
-		return t.compareContains(cellValue, filter.Value, filter.IgnoreCase)
-	case NotContains:
-		return !t.compareContains(cellValue, filter.Value, filter.IgnoreCase)
-	case StartsWith:
-		return t.compareStartsWith(cellValue, filter.Value, filter.IgnoreCase)
-	case EndsWith:
-		return t.compareEndsWith(cellValue, filter.Value, filter.IgnoreCase)
-	case RegexMatch:
-		return t.compareRegexMatch(cellValue, filter.Value, filter.IgnoreCase)
-	case RegexNotMatch:
-		return !t.compareRegexMatch(cellValue, filter.Value, filter.IgnoreCase)
-	default:
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (t *Table) compareEqual(cellValue string, filterValue interface{}, ignoreCase bool) bool {
-	filterStr := fmt.Sprint(filterValue)
-	if ignoreCase {
-		return strings.EqualFold(cellValue, filterStr)
-	}
-	return cellValue == filterStr
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (t *Table) compareNumeric(cellValue string, filterValue interface{}, compareFunc func(float64, float64) bool) bool {
-	cellNum, cellErr := strconv.ParseFloat(cellValue, 64)
-	if cellErr != nil {
-		return false
-	}
-
-	var filterNum float64
-	switch v := filterValue.(type) {
-	case int:
-		filterNum = float64(v)
-	case int64:
-		filterNum = float64(v)
-	case float64:
-		filterNum = v
-	case float32:
-		filterNum = float64(v)
-	case string:
-		var err error
-		filterNum, err = strconv.ParseFloat(v, 64)
-		if err != nil {
-			return false
-		}
-	default:
-		// Try to convert to string and parse
-		filterStr := fmt.Sprint(filterValue)
-		var err error
-		filterNum, err = strconv.ParseFloat(filterStr, 64)
-		if err != nil {
-			return false
-		}
-	}
-
-	return compareFunc(cellNum, filterNum)
+	_ = "STUB: not implemented"
+	return false
 }
 
+// Try to convert to string and parse
+
 func (t *Table) compareContains(cellValue string, filterValue interface{}, ignoreCase bool) bool {
-	filterStr := fmt.Sprint(filterValue)
-	if ignoreCase {
-		return strings.Contains(strings.ToLower(cellValue), strings.ToLower(filterStr))
-	}
-	return strings.Contains(cellValue, filterStr)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (t *Table) compareStartsWith(cellValue string, filterValue interface{}, ignoreCase bool) bool {
-	filterStr := fmt.Sprint(filterValue)
-	if ignoreCase {
-		return strings.HasPrefix(strings.ToLower(cellValue), strings.ToLower(filterStr))
-	}
-	return strings.HasPrefix(cellValue, filterStr)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (t *Table) compareEndsWith(cellValue string, filterValue interface{}, ignoreCase bool) bool {
-	filterStr := fmt.Sprint(filterValue)
-	if ignoreCase {
-		return strings.HasSuffix(strings.ToLower(cellValue), strings.ToLower(filterStr))
-	}
-	return strings.HasSuffix(cellValue, filterStr)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (t *Table) compareRegexMatch(cellValue string, filterValue interface{}, ignoreCase bool) bool {
-	filterStr := fmt.Sprint(filterValue)
-
-	// Compile the regex pattern
-	var pattern *regexp.Regexp
-	var err error
-	if ignoreCase {
-		pattern, err = regexp.Compile("(?i)" + filterStr)
-	} else {
-		pattern, err = regexp.Compile(filterStr)
-	}
-
-	if err != nil {
-		// If regex compilation fails, fall back to simple string matching
-		return t.compareEqual(cellValue, filterValue, ignoreCase)
-	}
-
-	return pattern.MatchString(cellValue)
+	_ = "STUB: not implemented"
+	return false
 }
+
+// Compile the regex pattern
+
+// If regex compilation fails, fall back to simple string matching

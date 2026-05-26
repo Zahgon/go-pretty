@@ -41,117 +41,73 @@ const (
 )
 
 // Sort applies the sorting method defined by SortBy.
-func (sb SortBy) Sort(trackers []*Tracker) {
-	switch sb {
-	case SortByIndex:
-		sort.Sort(sortByIndex(trackers))
-	case SortByIndexDsc:
-		sort.Stable(sortByIndexDsc(trackers))
-	case SortByMessage:
-		sort.Sort(sortByMessage(trackers))
-	case SortByMessageDsc:
-		sort.Sort(sortDsc{sortByMessage(trackers)})
-	case SortByPercent:
-		sort.Stable(sortByPercent(trackers))
-	case SortByPercentDsc:
-		sort.Stable(sortByPercentDsc(trackers))
-	case SortByValue:
-		sort.Stable(sortByValue(trackers))
-	case SortByValueDsc:
-		sort.Stable(sortByValueDsc(trackers))
-	default:
-		// no sort
-	}
-}
+func (sb SortBy) Sort(trackers []*Tracker) { _ = "STUB: not implemented"; return }
+
+// no sort
 
 type sortByIndex []*Tracker
 
-func (sb sortByIndex) Len() int      { return len(sb) }
-func (sb sortByIndex) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByIndex) Less(i, j int) bool {
-	if sb[i].Index == sb[j].Index {
-		// Same index: maintain insertion order (use timeStart as tiebreaker)
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	return sb[i].Index < sb[j].Index
-}
+func (sb sortByIndex) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByIndex) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByIndex) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+// Same index: maintain insertion order (use timeStart as tiebreaker)
 
 type sortByIndexDsc []*Tracker
 
-func (sb sortByIndexDsc) Len() int      { return len(sb) }
-func (sb sortByIndexDsc) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByIndexDsc) Less(i, j int) bool {
-	if sb[i].Index == sb[j].Index {
-		// Same index: maintain insertion order (earlier timeStart first)
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	// Reverse: higher index comes first
-	return sb[i].Index > sb[j].Index
-}
+func (sb sortByIndexDsc) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByIndexDsc) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByIndexDsc) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+// Same index: maintain insertion order (earlier timeStart first)
+
+// Reverse: higher index comes first
 
 type sortByMessage []*Tracker
 
-func (sb sortByMessage) Len() int           { return len(sb) }
-func (sb sortByMessage) Swap(i, j int)      { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByMessage) Less(i, j int) bool { return sb[i].message() < sb[j].message() }
+func (sb sortByMessage) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByMessage) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByMessage) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 type sortByPercent []*Tracker
 
-func (sb sortByPercent) Len() int      { return len(sb) }
-func (sb sortByPercent) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByPercent) Less(i, j int) bool {
-	if sb[i].PercentDone() == sb[j].PercentDone() {
-		// When percentages are equal, preserve insertion order (earlier timeStart first)
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	return sb[i].PercentDone() < sb[j].PercentDone()
-}
+func (sb sortByPercent) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByPercent) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByPercent) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+// When percentages are equal, preserve insertion order (earlier timeStart first)
 
 type sortByPercentDsc []*Tracker
 
-func (sb sortByPercentDsc) Len() int      { return len(sb) }
-func (sb sortByPercentDsc) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByPercentDsc) Less(i, j int) bool {
-	if sb[i].PercentDone() == sb[j].PercentDone() {
-		// When percentages are equal, preserve insertion order (earlier timeStart first)
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	// Reverse: higher percentage comes first
-	return sb[i].PercentDone() > sb[j].PercentDone()
-}
+func (sb sortByPercentDsc) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByPercentDsc) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByPercentDsc) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+// When percentages are equal, preserve insertion order (earlier timeStart first)
+
+// Reverse: higher percentage comes first
 
 type sortByValue []*Tracker
 
-func (sb sortByValue) Len() int      { return len(sb) }
-func (sb sortByValue) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByValue) Less(i, j int) bool {
-	valueI := sb[i].Value()
-	valueJ := sb[j].Value()
-	if valueI == valueJ {
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	return valueI < valueJ
-}
+func (sb sortByValue) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByValue) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByValue) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 type sortByValueDsc []*Tracker
 
-func (sb sortByValueDsc) Len() int      { return len(sb) }
-func (sb sortByValueDsc) Swap(i, j int) { sb[i], sb[j] = sb[j], sb[i] }
-func (sb sortByValueDsc) Less(i, j int) bool {
-	valueI := sb[i].Value()
-	valueJ := sb[j].Value()
-	if valueI == valueJ {
-		// When values are equal, preserve insertion order (earlier timeStart first)
-		return sb[i].timeStartValue().Before(sb[j].timeStartValue())
-	}
-	// Reverse: higher value comes first
-	return valueI > valueJ
-}
+func (sb sortByValueDsc) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (sb sortByValueDsc) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (sb sortByValueDsc) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+// When values are equal, preserve insertion order (earlier timeStart first)
+
+// Reverse: higher value comes first
 
 type sortDsc struct{ sort.Interface }
 
 func (sd sortDsc) Less(i, j int) bool {
+	_ = "STUB: not implemented"
 	// Reverse the comparison for descending order
 	// When elements are equal (both Less calls return false), preserve insertion order
-	return !sd.Interface.Less(i, j) && sd.Interface.Less(j, i)
+	return false
 }

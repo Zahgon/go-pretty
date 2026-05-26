@@ -5,7 +5,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/pkg/profile"
 )
 
@@ -20,17 +19,8 @@ var (
 )
 
 func profileRender(profiler func(profile2 *profile.Profile), n int) {
-	defer profile.Start(profiler, profile.ProfilePath("./")).Stop()
-
-	for i := 0; i < n; i++ {
-		lw := list.NewWriter()
-		lw.AppendItem(listItem1)
-		lw.Indent()
-		lw.AppendItems(listItems2)
-		lw.Indent()
-		lw.AppendItems(listItems3)
-		lw.Render()
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

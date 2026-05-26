@@ -1,9 +1,5 @@
 package text
 
-import (
-	"fmt"
-)
-
 // Cursor helps move the cursor on the console in multiple directions.
 type Cursor rune
 
@@ -26,14 +22,7 @@ const (
 )
 
 // Sprint prints the Escape Sequence to move the Cursor once.
-func (c Cursor) Sprint() string {
-	return fmt.Sprintf("%s%c", EscapeStart, c)
-}
+func (c Cursor) Sprint() string { _ = "STUB: not implemented"; return "" }
 
 // Sprintn prints the Escape Sequence to move the Cursor "n" times.
-func (c Cursor) Sprintn(n int) string {
-	if c == EraseLine {
-		return c.Sprint()
-	}
-	return fmt.Sprintf("%s%d%c", EscapeStart, n, c)
-}
+func (c Cursor) Sprintn(n int) string { _ = "STUB: not implemented"; return "" }

@@ -18,12 +18,4 @@ const (
 
 // Modifier returns a character to force the given direction for the text that
 // follows the modifier.
-func (d Direction) Modifier() string {
-	switch d {
-	case LeftToRight:
-		return string(RuneL2R)
-	case RightToLeft:
-		return string(RuneR2L)
-	}
-	return ""
-}
+func (d Direction) Modifier() string { _ = "STUB: not implemented"; return "" }

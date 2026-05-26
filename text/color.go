@@ -1,11 +1,6 @@
 package text
 
 import (
-	"fmt"
-	"os"
-	"sort"
-	"strconv"
-	"strings"
 	"sync"
 )
 
@@ -13,34 +8,23 @@ import (
 var colorsEnabled = areColorsOnInTheEnv() && areANSICodesSupported()
 
 // DisableColors (forcefully) disables color coding globally.
-func DisableColors() {
-	colorsEnabled = false
-}
+func DisableColors() { _ = "STUB: not implemented"; return }
 
 // EnableColors (forcefully) enables color coding globally.
-func EnableColors() {
-	colorsEnabled = true
-}
+func EnableColors() { _ = "STUB: not implemented"; return }
 
 // areColorsOnInTheEnv returns true if colors are not disabled using
 // well known environment variables.
 func areColorsOnInTheEnv() bool {
+	_ = "STUB: not implemented"
 	// FORCE_COLOR takes precedence - if set to a truthy value, enable colors
-	forceColor := os.Getenv("FORCE_COLOR")
-	if forceColor != "" && forceColor != "0" && forceColor != "false" {
-		return true
-	}
-
-	// NO_COLOR: if set to any non-empty value (except "0"), disable colors
-	// Note: "0" is treated as "not set" to allow explicit enabling via NO_COLOR=0
-	noColor := os.Getenv("NO_COLOR")
-	if noColor != "" && noColor != "0" {
-		return false
-	}
-
-	// Default: check TERM - if not "dumb", assume colors are supported
-	return os.Getenv("TERM") != "dumb"
+	return false
 }
+
+// NO_COLOR: if set to any non-empty value (except "0"), disable colors
+// Note: "0" is treated as "not set" to allow explicit enabling via NO_COLOR=0
+
+// Default: check TERM - if not "dumb", assume colors are supported
 
 // The logic here is inspired from github.com/fatih/color; the following is
 // the bare minimum logic required to print Colored to the console.
@@ -130,57 +114,34 @@ const (
 
 // CSSClasses returns the CSS class names for the color.
 func (c Color) CSSClasses() string {
+	_ = "STUB: not implemented"
 	// Check for 256-color and convert to RGB-based class
-	if c >= fg256Start && c < fg256Start+256 {
-		colorIndex := int(c - fg256Start)
-		r, g, b := color256ToRGB(colorIndex)
-		return fmt.Sprintf("fg-256-%d-%d-%d", r, g, b)
-	}
-	if c >= bg256Start && c < bg256Start+256 {
-		colorIndex := int(c - bg256Start)
-		r, g, b := color256ToRGB(colorIndex)
-		return fmt.Sprintf("bg-256-%d-%d-%d", r, g, b)
-	}
-	// Existing behavior for standard colors
-	if class, ok := colorCSSClassMap[c]; ok {
-		return class
-	}
 	return ""
 }
 
+// Existing behavior for standard colors
+
 // EscapeSeq returns the ANSI escape sequence for the color.
 func (c Color) EscapeSeq() string {
+	_ = "STUB: not implemented"
 	// Check if it's a 256-color foreground (1000-1255)
-	if c >= fg256Start && c < fg256Start+256 {
-		colorIndex := int(c - fg256Start)
-		return fmt.Sprintf("%s38;5;%d%s", EscapeStart, colorIndex, EscapeStop)
-	}
-	// Check if it's a 256-color background (2000-2255)
-	if c >= bg256Start && c < bg256Start+256 {
-		colorIndex := int(c - bg256Start)
-		return fmt.Sprintf("%s48;5;%d%s", EscapeStart, colorIndex, EscapeStop)
-	}
-	// Regular color (existing behavior)
-	return EscapeStart + strconv.Itoa(int(c)) + EscapeStop
+	return ""
 }
+
+// Check if it's a 256-color background (2000-2255)
+
+// Regular color (existing behavior)
 
 // HTMLProperty returns the "class" attribute for the color.
-func (c Color) HTMLProperty() string {
-	classes := c.CSSClasses()
-	if classes == "" {
-		return ""
-	}
-	return fmt.Sprintf("class=\"%s\"", classes)
-}
+func (c Color) HTMLProperty() string { _ = "STUB: not implemented"; return "" }
 
 // Sprint colorizes and prints the given string(s).
-func (c Color) Sprint(a ...interface{}) string {
-	return colorize(fmt.Sprint(a...), c.EscapeSeq())
-}
+func (c Color) Sprint(a ...interface{}) string { _ = "STUB: not implemented"; return "" }
 
 // Sprintf formats and colorizes and prints the given string(s).
 func (c Color) Sprintf(format string, a ...interface{}) string {
-	return colorize(fmt.Sprintf(format, a...), c.EscapeSeq())
+	_ = "STUB: not implemented"
+	return ""
 }
 
 // Colors represents an array of Color objects to render with.
@@ -191,159 +152,80 @@ type Colors []Color
 var colorsSeqMap = sync.Map{}
 
 // CSSClasses returns the CSS class names for the colors.
-func (c Colors) CSSClasses() string {
-	if len(c) == 0 {
-		return ""
-	}
-
-	var classes []string
-	for _, color := range c {
-		class := color.CSSClasses()
-		if class != "" {
-			classes = append(classes, class)
-		}
-	}
-	if len(classes) > 1 {
-		sort.Strings(classes)
-	}
-	return strings.Join(classes, " ")
-}
+func (c Colors) CSSClasses() string { _ = "STUB: not implemented"; return "" }
 
 // EscapeSeq returns the ANSI escape sequence for the colors set.
-func (c Colors) EscapeSeq() string {
-	if len(c) == 0 {
-		return ""
-	}
-
-	colorsKey := fmt.Sprintf("%#v", c)
-	escapeSeq, ok := colorsSeqMap.Load(colorsKey)
-	if !ok || escapeSeq == "" {
-		codes := make([]string, 0, len(c))
-		for _, color := range c {
-			codes = append(codes, c.colorToCode(color))
-		}
-		escapeSeq = EscapeStart + strings.Join(codes, ";") + EscapeStop
-		colorsSeqMap.Store(colorsKey, escapeSeq)
-	}
-	return escapeSeq.(string)
-}
+func (c Colors) EscapeSeq() string { _ = "STUB: not implemented"; return "" }
 
 // colorToCode converts a Color to its escape sequence code string.
 func (c Colors) colorToCode(color Color) string {
+	_ = "STUB: not implemented"
 	// Check if it's a 256-color foreground (1000-1255)
-	if color >= fg256Start && color < fg256Start+256 {
-		colorIndex := int(color - fg256Start)
-		return fmt.Sprintf("38;5;%d", colorIndex)
-	}
-	// Check if it's a 256-color background (2000-2255)
-	if color >= bg256Start && color < bg256Start+256 {
-		colorIndex := int(color - bg256Start)
-		return fmt.Sprintf("48;5;%d", colorIndex)
-	}
-	// Regular color
-	return strconv.Itoa(int(color))
+	return ""
 }
+
+// Check if it's a 256-color background (2000-2255)
+
+// Regular color
 
 // HTMLProperty returns the "class" attribute for the colors.
-func (c Colors) HTMLProperty() string {
-	classes := c.CSSClasses()
-	if classes == "" {
-		return ""
-	}
-	return fmt.Sprintf("class=\"%s\"", classes)
-}
+func (c Colors) HTMLProperty() string { _ = "STUB: not implemented"; return "" }
 
 // Sprint colorizes and prints the given string(s).
-func (c Colors) Sprint(a ...interface{}) string {
-	return colorize(fmt.Sprint(a...), c.EscapeSeq())
-}
+func (c Colors) Sprint(a ...interface{}) string { _ = "STUB: not implemented"; return "" }
 
 // Sprintf formats and colorizes and prints the given string(s).
 func (c Colors) Sprintf(format string, a ...interface{}) string {
-	return colorize(fmt.Sprintf(format, a...), c.EscapeSeq())
+	_ = "STUB: not implemented"
+	return ""
 }
 
-func colorize(s string, escapeSeq string) string {
-	if !colorsEnabled || escapeSeq == "" {
-		return s
-	}
-	return Escape(s, escapeSeq)
-}
+func colorize(s string, escapeSeq string) string { _ = "STUB: not implemented"; return "" }
 
 // Fg256Color returns a foreground 256-color Color value.
 // The index must be in the range 0-255.
-func Fg256Color(index int) Color {
-	if index < 0 || index > 255 {
-		return Reset
-	}
-	return fg256Start + Color(index)
-}
+func Fg256Color(index int) Color { _ = "STUB: not implemented"; return *new(Color) }
 
 // Bg256Color returns a background 256-color Color value.
 // The index must be in the range 0-255.
-func Bg256Color(index int) Color {
-	if index < 0 || index > 255 {
-		return Reset
-	}
-	return bg256Start + Color(index)
-}
+func Bg256Color(index int) Color { _ = "STUB: not implemented"; return *new(Color) }
 
 // Fg256RGB returns a foreground 256-color from RGB values in the 6x6x6 color cube.
 // Each RGB component must be in the range 0-5.
 // The resulting color index will be in the range 16-231.
-func Fg256RGB(r, g, b int) Color {
-	if r < 0 || r > 5 || g < 0 || g > 5 || b < 0 || b > 5 {
-		return Reset
-	}
-	index := 16 + (r*36 + g*6 + b)
-	return Fg256Color(index)
-}
+func Fg256RGB(r, g, b int) Color { _ = "STUB: not implemented"; return *new(Color) }
 
 // Bg256RGB returns a background 256-color from RGB values in the 6x6x6 color cube.
 // Each RGB component must be in the range 0-5.
 // The resulting color index will be in the range 16-231.
-func Bg256RGB(r, g, b int) Color {
-	if r < 0 || r > 5 || g < 0 || g > 5 || b < 0 || b > 5 {
-		return Reset
-	}
-	index := 16 + (r*36 + g*6 + b)
-	return Bg256Color(index)
-}
+func Bg256RGB(r, g, b int) Color { _ = "STUB: not implemented"; return *new(Color) }
 
 // color256ToRGB converts a 256-color index to RGB values.
 // Returns (r, g, b) values in the range 0-255.
 func color256ToRGB(index int) (r, g, b int) {
-	if index < 16 {
-		// Standard 16 colors - map to predefined RGB values
-		standardColors := [16][3]int{
-			{0, 0, 0},       // 0: black
-			{128, 0, 0},     // 1: red
-			{0, 128, 0},     // 2: green
-			{128, 128, 0},   // 3: yellow
-			{0, 0, 128},     // 4: blue
-			{128, 0, 128},   // 5: magenta
-			{0, 128, 128},   // 6: cyan
-			{192, 192, 192}, // 7: light gray
-			{128, 128, 128}, // 8: dark gray
-			{255, 0, 0},     // 9: bright red
-			{0, 255, 0},     // 10: bright green
-			{255, 255, 0},   // 11: bright yellow
-			{0, 0, 255},     // 12: bright blue
-			{255, 0, 255},   // 13: bright magenta
-			{0, 255, 255},   // 14: bright cyan
-			{255, 255, 255}, // 15: white
-		}
-		return standardColors[index][0], standardColors[index][1], standardColors[index][2]
-	} else if index < 232 {
-		// 216-color RGB cube (16-231)
-		index -= 16
-		r = (index / 36) * 51
-		g = ((index / 6) % 6) * 51
-		b = (index % 6) * 51
-	} else {
-		// 24 grayscale colors (232-255)
-		gray := 8 + (index-232)*10
-		r, g, b = gray, gray, gray
-	}
-	return
+	_ = "STUB: not implemented"
+
+	// Standard 16 colors - map to predefined RGB values
+	return 0, 0, 0
 }
+
+// 0: black
+// 1: red
+// 2: green
+// 3: yellow
+// 4: blue
+// 5: magenta
+// 6: cyan
+// 7: light gray
+// 8: dark gray
+// 9: bright red
+// 10: bright green
+// 11: bright yellow
+// 12: bright blue
+// 13: bright magenta
+// 14: bright cyan
+// 15: white
+
+// 216-color RGB cube (16-231)
+
+// 24 grayscale colors (232-255)

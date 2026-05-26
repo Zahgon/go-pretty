@@ -1,11 +1,5 @@
 package table
 
-import (
-	"sort"
-	"strconv"
-	"strings"
-)
-
 // SortBy defines What to sort (Column Name or Number), and How to sort (Mode).
 type SortBy struct {
 	// Name is the name of the Column as it appears in the first Header row.
@@ -63,166 +57,71 @@ const (
 
 // getSortedRowIndices sorts and returns the row indices in Sorted order as
 // directed by Table.sortBy which can be set using Table.SortBy(...)
-func (t *Table) getSortedRowIndices() []int {
-	sortedIndices := make([]int, len(t.rows))
-	for idx := range t.rows {
-		sortedIndices[idx] = idx
-	}
+func (t *Table) getSortedRowIndices() []int { _ = "STUB: not implemented"; return nil }
 
-	if len(t.sortBy) > 0 {
-		parsedSortBy := t.parseSortBy(t.sortBy)
-		sort.Slice(sortedIndices, func(i, j int) bool {
-			isEqual, isLess := false, false
-			realI, realJ := sortedIndices[i], sortedIndices[j]
-			for _, sortBy := range parsedSortBy {
-				// extract the values/cells from the rows for comparison
-				rowI, rowJ, colIdx := t.rows[realI], t.rows[realJ], sortBy.Number-1
-				iVal, jVal := "", ""
-				if colIdx < len(rowI) {
-					iVal = rowI[colIdx]
-				}
-				if colIdx < len(rowJ) {
-					jVal = rowJ[colIdx]
-				}
+// extract the values/cells from the rows for comparison
 
-				// compare and choose whether to continue
-				isEqual, isLess = less(iVal, jVal, sortBy)
-				// if the values are not equal, return the result immediately
-				if !isEqual {
-					return isLess
-				}
-				// if the values are equal, continue to the next column
-			}
-			return isLess
-		})
-	}
+// compare and choose whether to continue
 
-	return sortedIndices
-}
+// if the values are not equal, return the result immediately
 
-func (t *Table) parseSortBy(sortBy []SortBy) []SortBy {
-	var resSortBy []SortBy
-	for _, col := range sortBy {
-		colNum := 0
-		if col.Number > 0 && col.Number <= t.numColumns {
-			colNum = col.Number
-		} else if col.Name != "" && len(t.rowsHeader) > 0 {
-			for idx, colName := range t.rowsHeader[0] {
-				if col.Name == colName {
-					colNum = idx + 1
-					break
-				}
-			}
-		}
-		if colNum > 0 {
-			resSortBy = append(resSortBy, SortBy{
-				Name:       col.Name,
-				Number:     colNum,
-				Mode:       col.Mode,
-				IgnoreCase: col.IgnoreCase,
-				CustomLess: col.CustomLess,
-			})
-		}
-	}
-	return resSortBy
-}
+// if the values are equal, continue to the next column
+
+func (t *Table) parseSortBy(sortBy []SortBy) []SortBy { _ = "STUB: not implemented"; return nil }
 
 func less(iVal string, jVal string, sb SortBy) (bool, bool) {
-	if sb.CustomLess != nil {
+	_ = "STUB: not implemented"
+	return false,
+
 		// use the custom less function to compare the values
-		rc := sb.CustomLess(iVal, jVal)
-		if rc < 0 {
-			return false, true
-		} else if rc > 0 {
-			return false, false
-		} else { // rc == 0
-			return true, false
-		}
-	}
-
-	// if the values are equal, return fast to continue to next column
-	if iVal == jVal {
-		return true, false
-	}
-
-	// otherwise, use the default sorting logic defined by Mode and IgnoreCase
-	switch sb.Mode {
-	case Asc, Dsc:
-		return lessAlphabetic(iVal, jVal, sb)
-	case AscNumeric, DscNumeric:
-		return lessNumeric(iVal, jVal, sb)
-	default: // AscAlphaNumeric, AscNumericAlpha, DscAlphaNumeric, DscNumericAlpha
-		return lessMixedMode(iVal, jVal, sb)
-	}
+		false
 }
+
+// rc == 0
+
+// if the values are equal, return fast to continue to next column
+
+// otherwise, use the default sorting logic defined by Mode and IgnoreCase
+
+// AscAlphaNumeric, AscNumericAlpha, DscAlphaNumeric, DscNumericAlpha
 
 func lessAlphabetic(iVal string, jVal string, sb SortBy) (bool, bool) {
-	if sb.IgnoreCase {
-		iLow := strings.ToLower(iVal)
-		jLow := strings.ToLower(jVal)
-		// when two strings are case-insensitive identical, compare them casesensitive.
-		// That makes sure to get a consistent sorting
-		identical := iLow == jLow
-		switch sb.Mode {
-		case Asc, AscAlphaNumeric, AscNumericAlpha:
-			return identical, (identical && iVal < jVal) || iLow < jLow
-		default: // Dsc, DscAlphaNumeric, DscNumericAlpha
-			return identical, (identical && iVal > jVal) || iLow > jLow
-		}
-	}
-	switch sb.Mode {
-	case Asc, AscAlphaNumeric, AscNumericAlpha:
-		return false, iVal < jVal
-	default: // Dsc, DscAlphaNumeric, DscNumericAlpha
-		return false, iVal > jVal
-	}
+	_ = "STUB: not implemented"
+	return false, false
 }
+
+// when two strings are case-insensitive identical, compare them casesensitive.
+// That makes sure to get a consistent sorting
+
+// Dsc, DscAlphaNumeric, DscNumericAlpha
+
+// Dsc, DscAlphaNumeric, DscNumericAlpha
 
 func lessMixedMode(iVal string, jVal string, sb SortBy) (bool, bool) {
-	iNumVal, iErr := strconv.ParseFloat(iVal, 64)
-	jNumVal, jErr := strconv.ParseFloat(jVal, 64)
-	if iErr != nil && jErr != nil { // both are alphanumeric
-		return lessAlphabetic(iVal, jVal, sb)
-	}
-	if iErr != nil { // iVal == "abc"; jVal == 5
-		switch sb.Mode {
-		case AscAlphaNumeric, DscAlphaNumeric:
-			return false, true
-		default: // AscNumericAlpha, DscNumericAlpha
-			return false, false
-		}
-	}
-	if jErr != nil { // iVal == 5; jVal	== "abc"
-		switch sb.Mode {
-		case AscAlphaNumeric, DscAlphaNumeric:
-			return false, false
-		default: // AscNumericAlpha, DscNumericAlpha:
-			return false, true
-		}
-	}
-	// both values numeric
-	return lessNumericVal(iNumVal, jNumVal, sb)
+	_ = "STUB: not implemented"
+	return false, false
 }
 
-func lessNumeric(iVal string, jVal string, sb SortBy) (bool, bool) {
-	iNumVal, iErr := strconv.ParseFloat(iVal, 64)
-	jNumVal, jErr := strconv.ParseFloat(jVal, 64)
-	if iErr != nil || jErr != nil {
-		return false, false
-	}
+// both are alphanumeric
 
-	return lessNumericVal(iNumVal, jNumVal, sb)
+// iVal == "abc"; jVal == 5
+
+// AscNumericAlpha, DscNumericAlpha
+
+// iVal == 5; jVal	== "abc"
+
+// AscNumericAlpha, DscNumericAlpha:
+
+// both values numeric
+
+func lessNumeric(iVal string, jVal string, sb SortBy) (bool, bool) {
+	_ = "STUB: not implemented"
+	return false, false
 }
 
 func lessNumericVal(iVal float64, jVal float64, sb SortBy) (bool, bool) {
-	if iVal == jVal {
-		return true, false
-	}
-
-	switch sb.Mode {
-	case AscNumeric, AscAlphaNumeric, AscNumericAlpha:
-		return false, iVal < jVal
-	default: // DscNumeric, DscAlphaNumeric, DscNumericAlpha
-		return false, iVal > jVal
-	}
+	_ = "STUB: not implemented"
+	return false, false
 }
+
+// DscNumeric, DscAlphaNumeric, DscNumericAlpha

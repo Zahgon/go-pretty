@@ -1,12 +1,5 @@
 package text
 
-import (
-	"fmt"
-	"strconv"
-	"strings"
-	"unicode/utf8"
-)
-
 // Align denotes how text is to be aligned horizontally.
 type Align int
 
@@ -27,138 +20,46 @@ const (
 //   - AlignJustify.Apply("Jon Snow", 12) returns "Jon     Snow"
 //   - AlignRight.Apply("Jon Snow",   12) returns "    Jon Snow"
 //   - AlignAuto.Apply("Jon Snow",    12) returns "Jon Snow    "
-func (a Align) Apply(text string, maxLength int) string {
-	aComputed := a
-	if aComputed == AlignAuto {
-		_, err := strconv.ParseFloat(text, 64)
-		if err == nil { // was able to parse a number out of the string
-			aComputed = AlignRight
-		} else {
-			aComputed = AlignLeft
-		}
-	}
+func (a Align) Apply(text string, maxLength int) string { _ = "STUB: not implemented"; return "" }
 
-	text = aComputed.trimString(text)
-	sLen := utf8.RuneCountInString(text)
-	sLenWoE := StringWidthWithoutEscSequences(text)
-	numEscChars := sLen - sLenWoE
+// was able to parse a number out of the string
 
-	// now, align the text
-	switch aComputed {
-	case AlignDefault, AlignLeft:
-		return fmt.Sprintf("%-"+strconv.Itoa(maxLength+numEscChars)+"s", text)
-	case AlignCenter:
-		if sLenWoE < maxLength {
-			// left pad with half the number of spaces needed before using %text
-			return fmt.Sprintf("%"+strconv.Itoa(maxLength+numEscChars)+"s",
-				text+strings.Repeat(" ", (maxLength-sLenWoE)/2))
-		}
-	case AlignJustify:
-		return justifyText(text, sLenWoE, maxLength)
-	}
-	return fmt.Sprintf("%"+strconv.Itoa(maxLength+numEscChars)+"s", text)
-}
+// now, align the text
+
+// left pad with half the number of spaces needed before using %text
 
 // HTMLProperty returns the equivalent HTML horizontal-align tag property.
-func (a Align) HTMLProperty() string {
-	switch a {
-	case AlignLeft:
-		return "align=\"left\""
-	case AlignCenter:
-		return "align=\"center\""
-	case AlignJustify:
-		return "align=\"justify\""
-	case AlignRight:
-		return "align=\"right\""
-	default:
-		return ""
-	}
-}
+func (a Align) HTMLProperty() string { _ = "STUB: not implemented"; return "" }
 
 // MarkdownProperty returns the equivalent Markdown horizontal-align separator.
 // An optional minLength can be provided to extend the dashes to match the
 // column content width; the result will be max(minLength, 3)+2 wide (including
 // leading/trailing space or colon). Without minLength (or 0), it defaults to 3.
-func (a Align) MarkdownProperty(minLength ...int) string {
-	length := 3
-	if len(minLength) > 0 && minLength[0] > length {
-		length = minLength[0]
-	}
-	dashes := strings.Repeat("-", length)
-	switch a {
-	case AlignLeft:
-		return ":" + dashes + " "
-	case AlignCenter:
-		return ":" + dashes + ":"
-	case AlignRight:
-		return " " + dashes + ":"
-	default:
-		return " " + dashes + " "
-	}
-}
+func (a Align) MarkdownProperty(minLength ...int) string { _ = "STUB: not implemented"; return "" }
 
-func (a Align) trimString(text string) string {
-	switch a {
-	case AlignDefault, AlignLeft:
-		if strings.HasSuffix(text, " ") {
-			return strings.TrimRight(text, " ")
-		}
-	case AlignRight:
-		if strings.HasPrefix(text, " ") {
-			return strings.TrimLeft(text, " ")
-		}
-	default:
-		if strings.HasPrefix(text, " ") || strings.HasSuffix(text, " ") {
-			return strings.Trim(text, " ")
-		}
-	}
-	return text
-}
+func (a Align) trimString(text string) string { _ = "STUB: not implemented"; return "" }
 
 func justifyText(text string, textLength int, maxLength int) string {
+	_ = "STUB: not implemented"
 	// split the text into individual words
-	words := Filter(strings.Split(text, " "), func(item string) bool {
-		return item != ""
-	})
-	// empty string implies result is just spaces for maxLength
-	if len(words) == 0 {
-		return strings.Repeat(" ", maxLength)
-	}
-
-	// get the number of spaces to insert into the text
-	numSpacesNeeded := maxLength - textLength + strings.Count(text, " ")
-	if numSpacesNeeded < 0 {
-		// textLength (display-width) exceeds maxLength; this can happen
-		// when the cell contains wide Unicode characters (e.g. CJK) whose
-		// display width is greater than their rune count. Return the text
-		// as-is; truncation is the caller's responsibility.
-		return text
-	}
-	numSpacesNeededBetweenWords := 0
-	if len(words) > 1 {
-		numSpacesNeededBetweenWords = numSpacesNeeded / (len(words) - 1)
-	}
-	// create the output string word by word with spaces in between
-	var outText strings.Builder
-	outText.Grow(maxLength)
-	for idx, word := range words {
-		if idx > 0 {
-			// insert spaces only after the first word
-			if idx == len(words)-1 {
-				// insert all the remaining space before the last word
-				outText.WriteString(strings.Repeat(" ", numSpacesNeeded))
-				numSpacesNeeded = 0
-			} else {
-				// insert the determined number of spaces between each word
-				outText.WriteString(strings.Repeat(" ", numSpacesNeededBetweenWords))
-				// and reduce the number of spaces needed after this
-				numSpacesNeeded -= numSpacesNeededBetweenWords
-			}
-		}
-		outText.WriteString(word)
-		if idx == len(words)-1 && numSpacesNeeded > 0 {
-			outText.WriteString(strings.Repeat(" ", numSpacesNeeded))
-		}
-	}
-	return outText.String()
+	return ""
 }
+
+// empty string implies result is just spaces for maxLength
+
+// get the number of spaces to insert into the text
+
+// textLength (display-width) exceeds maxLength; this can happen
+// when the cell contains wide Unicode characters (e.g. CJK) whose
+// display width is greater than their rune count. Return the text
+// as-is; truncation is the caller's responsibility.
+
+// create the output string word by word with spaces in between
+
+// insert spaces only after the first word
+
+// insert all the remaining space before the last word
+
+// insert the determined number of spaces between each word
+
+// and reduce the number of spaces needed after this

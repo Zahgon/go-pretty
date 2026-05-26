@@ -1,11 +1,8 @@
 package table
 
 import (
-	"fmt"
 	"io"
 	"strings"
-	"time"
-	"unicode"
 
 	"github.com/jedib0t/go-pretty/v6/text"
 )
@@ -110,54 +107,24 @@ type Table struct {
 // AppendFooter appends the row to the List of footers to render.
 //
 // Only the first item in the "config" will be tagged against this row.
-func (t *Table) AppendFooter(row Row, config ...RowConfig) {
-	t.rowsFooterRaw = append(t.rowsFooterRaw, row)
-	if len(config) > 0 {
-		if t.rowsFooterConfigMap == nil {
-			t.rowsFooterConfigMap = make(map[int]RowConfig)
-		}
-		t.rowsFooterConfigMap[len(t.rowsFooterRaw)-1] = config[0]
-	}
-}
+func (t *Table) AppendFooter(row Row, config ...RowConfig) { _ = "STUB: not implemented"; return }
 
 // AppendHeader appends the row to the List of headers to render.
 //
 // Only the first item in the "config" will be tagged against this row.
-func (t *Table) AppendHeader(row Row, config ...RowConfig) {
-	t.rowsHeaderRaw = append(t.rowsHeaderRaw, row)
-	if len(config) > 0 {
-		if t.rowsHeaderConfigMap == nil {
-			t.rowsHeaderConfigMap = make(map[int]RowConfig)
-		}
-		t.rowsHeaderConfigMap[len(t.rowsHeaderRaw)-1] = config[0]
-	}
-}
+func (t *Table) AppendHeader(row Row, config ...RowConfig) { _ = "STUB: not implemented"; return }
 
 // AppendRow appends the row to the List of rows to render.
 //
 // Only the first item in the "config" will be tagged against this row.
-func (t *Table) AppendRow(row Row, config ...RowConfig) {
-	t.rowsRawFiltered = append(t.rowsRawFiltered, row)
-	// Keep original rows in sync for filtering
-	rowCopy := make(Row, len(row))
-	copy(rowCopy, row)
-	t.rowsRaw = append(t.rowsRaw, rowCopy)
-	if len(config) > 0 {
-		if t.rowsConfigMap == nil {
-			t.rowsConfigMap = make(map[int]RowConfig)
-		}
-		t.rowsConfigMap[len(t.rowsRawFiltered)-1] = config[0]
-	}
-}
+func (t *Table) AppendRow(row Row, config ...RowConfig) { _ = "STUB: not implemented"; return }
+
+// Keep original rows in sync for filtering
 
 // AppendRows appends the rows to the List of rows to render.
 //
 // Only the first item in the "config" will be tagged against all the rows.
-func (t *Table) AppendRows(rows []Row, config ...RowConfig) {
-	for _, row := range rows {
-		t.AppendRow(row, config...)
-	}
-}
+func (t *Table) AppendRows(rows []Row, config ...RowConfig) { _ = "STUB: not implemented"; return }
 
 // AppendSeparator helps render a separator row after the current last row. You
 // could call this function over and over, but it will be a no-op unless you
@@ -174,786 +141,281 @@ func (t *Table) AppendRows(rows []Row, config ...RowConfig) {
 //     follow
 //
 // ******************************************************************************
-func (t *Table) AppendSeparator() {
-	if t.separators == nil {
-		t.separators = make(map[int]bool)
-	}
-	if len(t.rowsRawFiltered) > 0 {
-		t.separators[len(t.rowsRawFiltered)-1] = true
-	}
-}
+func (t *Table) AppendSeparator() { _ = "STUB: not implemented"; return }
 
 // FilterBy sets the rules for filtering the Rows. All filters are applied with
 // AND logic (all must match). Filters are applied before sorting.
-func (t *Table) FilterBy(filterBy []FilterBy) {
-	t.filterBy = filterBy
-}
+func (t *Table) FilterBy(filterBy []FilterBy) { _ = "STUB: not implemented"; return }
 
 // ImportGrid helps import 1d or 2d arrays as rows.
-func (t *Table) ImportGrid(grid interface{}) bool {
-	rows := objAsSlice(grid)
-	if rows == nil {
-		return false
-	}
-	addedRows := false
-	for _, row := range rows {
-		rowAsSlice := objAsSlice(row)
-		if rowAsSlice != nil {
-			t.AppendRow(rowAsSlice)
-		} else if row != nil {
-			t.AppendRow(Row{row})
-		}
-		addedRows = true
-	}
-	return addedRows
-}
+func (t *Table) ImportGrid(grid interface{}) bool { _ = "STUB: not implemented"; return false }
 
 // Length returns the number of rows to be rendered.
-func (t *Table) Length() int {
-	return len(t.rowsRawFiltered)
-}
+func (t *Table) Length() int { _ = "STUB: not implemented"; return 0 }
 
 // Pager returns an object that splits the table output into pages and
 // lets you move back and forth through them.
-func (t *Table) Pager(opts ...PagerOption) Pager {
-	for _, opt := range opts {
-		opt(t)
-	}
+func (t *Table) Pager(opts ...PagerOption) Pager { _ = "STUB: not implemented"; return *new(Pager) }
 
-	// use a temporary page separator for splitting up the pages
-	tempPageSep := fmt.Sprintf("%p // page separator // %d", t.rows, time.Now().UnixNano())
+// use a temporary page separator for splitting up the pages
 
-	// backup
-	origOutputMirror, origPageSep := t.outputMirror, t.Style().Box.PageSeparator
-	// restore on exit
-	defer func() {
-		t.outputMirror = origOutputMirror
-		t.Style().Box.PageSeparator = origPageSep
-	}()
-	// override
-	t.outputMirror = nil
-	t.Style().Box.PageSeparator = tempPageSep
-	// render
-	t.pager.pages = strings.Split(t.Render(), tempPageSep)
+// backup
 
-	return &t.pager
-}
+// restore on exit
+
+// override
+
+// render
 
 // ResetFooters resets and clears all the Footer rows appended earlier.
-func (t *Table) ResetFooters() {
-	t.rowsFooterRaw = nil
-}
+func (t *Table) ResetFooters() { _ = "STUB: not implemented"; return }
 
 // ResetHeaders resets and clears all the Header rows appended earlier.
-func (t *Table) ResetHeaders() {
-	t.rowsHeaderRaw = nil
-}
+func (t *Table) ResetHeaders() { _ = "STUB: not implemented"; return }
 
 // ResetRows resets and clears all the rows appended earlier.
-func (t *Table) ResetRows() {
-	t.rowsRawFiltered = nil
-	t.rowsRaw = nil
-	t.separators = nil
-}
+func (t *Table) ResetRows() { _ = "STUB: not implemented"; return }
 
 // SetAllowedRowLength sets the maximum allowed length or a row (or line of
 // output) when rendered as a table. Rows that are longer than this limit will
 // be "snipped" to the length. Length has to be a positive value to take effect.
 //
 // Deprecated: in favor if Style().Size.WidthMax
-func (t *Table) SetAllowedRowLength(length int) {
-	t.allowedRowLength = length
-}
+func (t *Table) SetAllowedRowLength(length int) { _ = "STUB: not implemented"; return }
 
 // SetAutoIndex adds a generated header with columns such as "A", "B", "C", etc.
 // and a leading column with the row number similar to what you'd see on any
 // spreadsheet application. NOTE: Appending a Header will void this
 // functionality.
-func (t *Table) SetAutoIndex(autoIndex bool) {
-	t.autoIndex = autoIndex
-}
+func (t *Table) SetAutoIndex(autoIndex bool) { _ = "STUB: not implemented"; return }
 
 // SetCaption sets the text to be rendered just below the table. This will not
 // show up when the Table is rendered as a CSV.
-func (t *Table) SetCaption(format string, a ...interface{}) {
-	t.caption = fmt.Sprintf(format, a...)
-}
+func (t *Table) SetCaption(format string, a ...interface{}) { _ = "STUB: not implemented"; return }
 
 // SetColumnConfigs sets the configs for each Column.
-func (t *Table) SetColumnConfigs(configs []ColumnConfig) {
-	t.columnConfigs = configs
-}
+func (t *Table) SetColumnConfigs(configs []ColumnConfig) { _ = "STUB: not implemented"; return }
 
 // SetHTMLCSSClass sets the HTML CSS Class to use on the <table> node
 // when rendering the Table in HTML format.
 //
 // Deprecated: in favor of Style().HTML.CSSClass
-func (t *Table) SetHTMLCSSClass(cssClass string) {
-	t.htmlCSSClass = cssClass
-}
+func (t *Table) SetHTMLCSSClass(cssClass string) { _ = "STUB: not implemented"; return }
 
 // SetIndexColumn sets the given Column # as the column that has the row
 // "Number". Valid values range from 1 to N. Note that this is not 0-indexed.
-func (t *Table) SetIndexColumn(colNum int) {
-	t.indexColumn = colNum
-}
+func (t *Table) SetIndexColumn(colNum int) { _ = "STUB: not implemented"; return }
 
 // SetOutputMirror sets an io.Writer for all the Render functions to "Write" to
 // in addition to returning a string.
-func (t *Table) SetOutputMirror(mirror io.Writer) {
-	t.outputMirror = mirror
-	t.pager.SetOutputMirror(mirror)
-}
+func (t *Table) SetOutputMirror(mirror io.Writer) { _ = "STUB: not implemented"; return }
 
 // SetPageSize sets the maximum number of lines to render before rendering the
 // header rows again. This can be useful when dealing with tables containing a
 // long list of rows that can span pages. Please note that the pagination logic
 // will not consider Header/Footer lines for paging.
-func (t *Table) SetPageSize(numLines int) {
-	t.pager.size = numLines
-}
+func (t *Table) SetPageSize(numLines int) { _ = "STUB: not implemented"; return }
 
 // SetRowPainter sets up the function which determines the colors to use on a
 // row. Before rendering, this function is invoked on all rows and the color
 // of each row is determined. This color takes precedence over other ways to
 // set color (ColumnConfig.Color*, SetColor*()).
 func (t *Table) SetRowPainter(painter interface{}) {
+	_ = "STUB: not implemented"
 	// TODO: fix interface on major version bump to accept only
 	// one type of RowPainter: RowPainterWithAttributes renamed to RowPainter
-
-	// reset both so only one is set at any given time
-	t.rowPainter = nil
-	t.rowPainterWithAttributes = nil
-
-	// if called as SetRowPainter(RowPainter(func...))
-	switch p := painter.(type) {
-	case RowPainter:
-		t.rowPainter = p
-		return
-	case RowPainterWithAttributes:
-		t.rowPainterWithAttributes = p
-		return
-	}
-
-	// if called as SetRowPainter(func...)
-	switch fmt.Sprintf("%T", painter) {
-	case "func(table.Row) text.Colors":
-		t.rowPainter = painter.(func(row Row) text.Colors)
-		return
-	case "func(table.Row, table.RowAttributes) text.Colors":
-		t.rowPainterWithAttributes = painter.(func(row Row, attr RowAttributes) text.Colors)
-		return
-	}
+	return
 }
+
+// reset both so only one is set at any given time
+
+// if called as SetRowPainter(RowPainter(func...))
+
+// if called as SetRowPainter(func...)
 
 // SetStyle overrides the DefaultStyle with the provided one.
 func (t *Table) SetStyle(style Style) {
-	t.style = &style
+	_ = "STUB: not implemented"
+
+	// SetTitle sets the title text to be rendered above the table.
+	return
 }
 
-// SetTitle sets the title text to be rendered above the table.
-func (t *Table) SetTitle(format string, a ...interface{}) {
-	t.title = fmt.Sprintf(format, a...)
-}
+func (t *Table) SetTitle(format string, a ...interface{}) { _ = "STUB: not implemented"; return }
 
 // SortBy sets the rules for sorting the Rows in the order specified. i.e., the
 // first SortBy instruction takes precedence over the second and so on. Any
 // duplicate instructions on the same column will be discarded while sorting.
 func (t *Table) SortBy(sortBy []SortBy) {
-	t.sortBy = sortBy
+	_ = "STUB: not implemented"
+
+	// Style returns the current style.
+	return
 }
 
-// Style returns the current style.
-func (t *Table) Style() *Style {
-	if t.style == nil {
-		tempStyle := StyleDefault
-		t.style = &tempStyle
-	}
-	// override WidthMax with allowedRowLength until allowedRowLength is
-	// removed from code
-	if t.allowedRowLength > 0 {
-		t.style.Size.WidthMax = t.allowedRowLength
-	}
-	return t.style
-}
+func (t *Table) Style() *Style { _ = "STUB: not implemented"; return nil }
+
+// override WidthMax with allowedRowLength until allowedRowLength is
+// removed from code
 
 // SuppressEmptyColumns hides columns when the column is empty in ALL the
 // regular rows.
-func (t *Table) SuppressEmptyColumns() {
-	t.suppressEmptyColumns = true
-}
+func (t *Table) SuppressEmptyColumns() { _ = "STUB: not implemented"; return }
 
 // SuppressTrailingSpaces removes all trailing spaces from the output.
-func (t *Table) SuppressTrailingSpaces() {
-	t.suppressTrailingSpaces = true
-}
+func (t *Table) SuppressTrailingSpaces() { _ = "STUB: not implemented"; return }
 
 // calculateNumColumnsFromRaw calculates the number of columns from raw rows and headers
 func (t *Table) calculateNumColumnsFromRaw() {
-	t.numColumns = 0
+	_ = "STUB: not implemented"
+
 	// Check headers first
-	if len(t.rowsHeaderRaw) > 0 {
-		for _, headerRow := range t.rowsHeaderRaw {
-			if len(headerRow) > t.numColumns {
-				t.numColumns = len(headerRow)
-			}
-		}
-	}
-	// Check data rows
-	for _, row := range t.rowsRawFiltered {
-		if len(row) > t.numColumns {
-			t.numColumns = len(row)
-		}
-	}
-	// Check footer rows
-	for _, footerRow := range t.rowsFooterRaw {
-		if len(footerRow) > t.numColumns {
-			t.numColumns = len(footerRow)
-		}
-	}
+	return
 }
+
+// Check data rows
+
+// Check footer rows
 
 func (t *Table) getAlign(colIdx int, hint renderHint) text.Align {
-	align := text.AlignDefault
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		if hint.isHeaderRow {
-			align = cfg.AlignHeader
-		} else if hint.isFooterRow {
-			align = cfg.AlignFooter
-		} else {
-			align = cfg.Align
-		}
-	}
-	if align == text.AlignDefault {
-		if !t.columnIsNonNumeric[colIdx] {
-			align = text.AlignRight
-		} else if hint.isAutoIndexRow {
-			align = text.AlignCenter
-		} else if hint.isHeaderRow {
-			align = t.style.Format.HeaderAlign
-		} else if hint.isFooterRow {
-			align = t.style.Format.FooterAlign
-		} else {
-			align = t.style.Format.RowAlign
-		}
-	}
-	return align
+	_ = "STUB: not implemented"
+	return *new(text.Align)
 }
 
-func (t *Table) getAutoIndexColumnIDs() rowStr {
-	row := make(rowStr, t.numColumns)
-	for colIdx := range row {
-		row[colIdx] = AutoIndexColumnID(colIdx)
-	}
-	return row
-}
+func (t *Table) getAutoIndexColumnIDs() rowStr { _ = "STUB: not implemented"; return *new(rowStr) }
 
 func (t *Table) getBorderColors(hint renderHint) text.Colors {
-	if t.style.Options.DoNotColorBordersAndSeparators {
-		return nil
-	} else if t.style.Color.Border != nil {
-		return t.style.Color.Border
-	} else if hint.isTitleRow {
-		return t.style.Title.Colors
-	} else if hint.isHeaderRow {
-		return t.style.Color.Header
-	} else if hint.isFooterRow {
-		return t.style.Color.Footer
-	} else if t.autoIndex {
-		return t.style.Color.IndexColumn
-	} else if hint.rowNumber%2 == 0 && t.style.Color.RowAlternate != nil {
-		return t.style.Color.RowAlternate
-	}
-	return t.style.Color.Row
+	_ = "STUB: not implemented"
+	return *new(text.Colors)
 }
 
-func (t *Table) getBorderLeft(hint renderHint) string {
-	border := t.style.Box.Left
-	if hint.isBorderTop {
-		if t.title != "" {
-			border = t.style.Box.LeftSeparator
-		} else {
-			border = t.style.Box.TopLeft
-		}
-	} else if hint.isBorderBottom {
-		border = t.style.Box.BottomLeft
-	} else if hint.isSeparatorRow {
-		if t.autoIndex && hint.isHeaderOrFooterSeparator() {
-			border = t.style.Box.Left
-		} else if !t.autoIndex && t.shouldMergeCellsVerticallyAbove(0, hint) {
-			border = t.style.Box.Left
-		} else {
-			border = t.style.Box.LeftSeparator
-		}
-	}
-	return border
-}
+func (t *Table) getBorderLeft(hint renderHint) string { _ = "STUB: not implemented"; return "" }
 
-func (t *Table) getBorderRight(hint renderHint) string {
-	border := t.style.Box.Right
-	if hint.isBorderTop {
-		if t.title != "" {
-			border = t.style.Box.RightSeparator
-		} else {
-			border = t.style.Box.TopRight
-		}
-	} else if hint.isBorderBottom {
-		border = t.style.Box.BottomRight
-	} else if hint.isSeparatorRow {
-		if t.shouldMergeCellsVerticallyAbove(t.numColumns-1, hint) {
-			border = t.style.Box.Right
-		} else {
-			border = t.style.Box.RightSeparator
-		}
-	}
-	return border
-}
+func (t *Table) getBorderRight(hint renderHint) string { _ = "STUB: not implemented"; return "" }
 
 func (t *Table) getColumnColors(colIdx int, hint renderHint) text.Colors {
-	if hint.isBorderOrSeparator() {
-		if colors := t.getColumnColorsForBorderOrSeparator(hint); colors != nil {
-			return colors
-		}
-	}
-	if t.hasRowPainter() && hint.isRegularNonSeparatorRow() && !t.isIndexColumn(colIdx, hint) {
-		if colors := t.rowsColors[hint.rowNumber-1]; colors != nil {
-			return colors
-		}
-	}
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		if hint.isSeparatorRow {
-			return nil
-		} else if hint.isHeaderRow {
-			return cfg.ColorsHeader
-		} else if hint.isFooterRow {
-			return cfg.ColorsFooter
-		}
-		return cfg.Colors
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(text.Colors)
 }
 
 func (t *Table) getColumnColorsForBorderOrSeparator(hint renderHint) text.Colors {
-	if t.style.Options.DoNotColorBordersAndSeparators {
-		return text.Colors{} // not nil to force caller to paint with no colors
-	}
-	if (hint.isBorderBottom || hint.isBorderTop) && t.style.Color.Border != nil {
-		return t.style.Color.Border
-	}
-	if hint.isSeparatorRow && t.style.Color.Separator != nil {
-		return t.style.Color.Separator
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(text.Colors)
 }
 
+// not nil to force caller to paint with no colors
+
 func (t *Table) getColumnSeparator(row rowStr, colIdx int, hint renderHint) string {
-	separator := t.style.Box.MiddleVertical
-	if hint.isSeparatorRow {
-		if hint.isBorderTop {
-			if t.shouldMergeCellsHorizontallyBelow(row, colIdx, hint) {
-				separator = t.style.Box.middleHorizontal(hint.separatorType)
-			} else {
-				separator = t.style.Box.TopSeparator
-			}
-		} else if hint.isBorderBottom {
-			if t.shouldMergeCellsHorizontallyAbove(row, colIdx, hint) {
-				separator = t.style.Box.middleHorizontal(hint.separatorType)
-			} else {
-				separator = t.style.Box.BottomSeparator
-			}
-		} else {
-			sm1 := t.shouldMergeCellsHorizontallyAbove(row, colIdx, hint)
-			sm2 := t.shouldMergeCellsHorizontallyBelow(row, colIdx, hint)
-			separator = t.getColumnSeparatorNonBorder(sm1, sm2, colIdx, hint)
-		}
-	}
-	return separator
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (t *Table) getColumnSeparatorNonBorder(mergeCellsAbove bool, mergeCellsBelow bool, colIdx int, hint renderHint) string {
-	mergeNextCol := t.shouldMergeCellsVerticallyAbove(colIdx, hint)
-	if hint.isAutoIndexColumn {
-		return t.getColumnSeparatorNonBorderAutoIndex(mergeNextCol, hint)
-	}
-
-	mergeCurrCol := t.shouldMergeCellsVerticallyAbove(colIdx-1, hint)
-	return t.getColumnSeparatorNonBorderNonAutoIndex(mergeCellsAbove, mergeCellsBelow, mergeCurrCol, mergeNextCol, hint)
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (t *Table) getColumnSeparatorNonBorderAutoIndex(mergeNextCol bool, hint renderHint) string {
-	if hint.isHeaderOrFooterSeparator() {
-		if mergeNextCol {
-			return t.style.Box.MiddleVertical
-		}
-		return t.style.Box.LeftSeparator
-	} else if mergeNextCol {
-		return t.style.Box.RightSeparator
-	}
-	return t.style.Box.MiddleSeparator
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (t *Table) getColumnSeparatorNonBorderNonAutoIndex(mergeCellsAbove bool, mergeCellsBelow bool, mergeCurrCol bool, mergeNextCol bool, hint renderHint) string {
-	if mergeCellsAbove && mergeCellsBelow && mergeCurrCol && mergeNextCol {
-		return t.style.Box.EmptySeparator
-	} else if mergeCellsAbove && mergeCellsBelow {
-		return t.style.Box.middleHorizontal(hint.separatorType)
-	} else if mergeCellsAbove {
-		return t.style.Box.TopSeparator
-	} else if mergeCellsBelow {
-		return t.style.Box.BottomSeparator
-	} else if mergeCurrCol && mergeNextCol {
-		return t.style.Box.MiddleVertical
-	} else if mergeCurrCol {
-		return t.style.Box.LeftSeparator
-	} else if mergeNextCol {
-		return t.style.Box.RightSeparator
-	}
-	return t.style.Box.MiddleSeparator
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (t *Table) getColumnTransformer(colIdx int, hint renderHint) text.Transformer {
-	var transformer text.Transformer
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		if hint.isHeaderRow {
-			transformer = cfg.TransformerHeader
-		} else if hint.isFooterRow {
-			transformer = cfg.TransformerFooter
-		} else {
-			transformer = cfg.Transformer
-		}
-	}
-	return transformer
+	_ = "STUB: not implemented"
+	return *new(text.Transformer)
 }
 
-func (t *Table) getColumnWidthMax(colIdx int) int {
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		return cfg.WidthMax
-	}
-	return 0
-}
+func (t *Table) getColumnWidthMax(colIdx int) int { _ = "STUB: not implemented"; return 0 }
 
-func (t *Table) getColumnWidthMin(colIdx int) int {
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		return cfg.WidthMin
-	}
-	return 0
-}
+func (t *Table) getColumnWidthMin(colIdx int) int { _ = "STUB: not implemented"; return 0 }
 
 func (t *Table) getFormat(hint renderHint) text.Format {
-	if hint.isSeparatorRow {
-		return text.FormatDefault
-	} else if hint.isHeaderRow {
-		return t.style.Format.Header
-	} else if hint.isFooterRow {
-		return t.style.Format.Footer
-	}
-	return t.style.Format.Row
+	_ = "STUB: not implemented"
+	return *new(text.Format)
 }
 
-func (t *Table) getMaxColumnLengthForMerging(colIdx int) int {
-	maxColumnLength := t.maxColumnLengths[colIdx]
-	maxColumnLength += text.StringWidthWithoutEscSequences(t.style.Box.PaddingRight + t.style.Box.PaddingLeft)
-	if t.style.Options.SeparateColumns {
-		maxColumnLength += text.StringWidthWithoutEscSequences(t.style.Box.EmptySeparator)
-	}
-	return maxColumnLength
-}
+func (t *Table) getMaxColumnLengthForMerging(colIdx int) int { _ = "STUB: not implemented"; return 0 }
 
 // getMergedColumnIndices returns a map of colIdx values to all the other colIdx
 // values (that are being merged) and their lengths.
 func (t *Table) getMergedColumnIndices(row rowStr, hint renderHint) mergedColumnIndices {
-	if !t.getRowConfig(hint).AutoMerge {
-		return nil
-	}
-
-	mci := make(mergedColumnIndices)
-	for colIdx := 0; colIdx < t.numColumns-1; colIdx++ {
-		for otherColIdx := colIdx + 1; otherColIdx < len(row); otherColIdx++ {
-			colsEqual := row[colIdx] == row[otherColIdx]
-			if !colsEqual {
-				lastEqual := otherColIdx - 1
-				if colIdx != lastEqual {
-					mci[colIdx] = lastEqual
-					colIdx = lastEqual
-				}
-				break
-			} else if colsEqual && otherColIdx == len(row)-1 {
-				mci[colIdx] = otherColIdx
-				colIdx = otherColIdx
-			}
-		}
-	}
-	return mci
+	_ = "STUB: not implemented"
+	return *new(mergedColumnIndices)
 }
 
 func (t *Table) getRow(rowIdx int, hint renderHint) rowStr {
-	switch {
-	case hint.isHeaderRow:
-		if rowIdx >= 0 && rowIdx < len(t.rowsHeader) {
-			return t.rowsHeader[rowIdx]
-		}
-	case hint.isFooterRow:
-		if rowIdx >= 0 && rowIdx < len(t.rowsFooter) {
-			return t.rowsFooter[rowIdx]
-		}
-	default:
-		if rowIdx >= 0 && rowIdx < len(t.rows) {
-			return t.rows[rowIdx]
-		}
-	}
-	return rowStr{}
+	_ = "STUB: not implemented"
+	return *new(rowStr)
 }
 
 func (t *Table) getRowConfig(hint renderHint) RowConfig {
-	rowIdx := hint.rowNumber - 1
-	if rowIdx < 0 {
-		rowIdx = 0
-	}
-
-	switch {
-	case hint.isHeaderRow:
-		return t.rowsHeaderConfigMap[rowIdx]
-	case hint.isFooterRow:
-		return t.rowsFooterConfigMap[rowIdx]
-	default:
-		return t.rowsConfigMap[rowIdx]
-	}
+	_ = "STUB: not implemented"
+	return *new(RowConfig)
 }
 
 func (t *Table) getSeparatorColors(hint renderHint) text.Colors {
-	if t.style.Options.DoNotColorBordersAndSeparators {
-		return nil
-	} else if (hint.isBorderBottom || hint.isBorderTop) && t.style.Color.Border != nil {
-		return t.style.Color.Border
-	} else if t.style.Color.Separator != nil {
-		return t.style.Color.Separator
-	} else if hint.isHeaderRow {
-		return t.style.Color.Header
-	} else if hint.isFooterRow {
-		return t.style.Color.Footer
-	} else if hint.isAutoIndexColumn {
-		return t.style.Color.IndexColumn
-	} else if hint.rowNumber > 0 && hint.rowNumber%2 == 0 {
-		return t.style.Color.RowAlternate
-	}
-	return t.style.Color.Row
+	_ = "STUB: not implemented"
+	return *new(text.Colors)
 }
 
 func (t *Table) getVAlign(colIdx int, hint renderHint) text.VAlign {
-	vAlign := text.VAlignDefault
-	if cfg, ok := t.columnConfigMap[colIdx]; ok {
-		if hint.isHeaderRow {
-			vAlign = cfg.VAlignHeader
-		} else if hint.isFooterRow {
-			vAlign = cfg.VAlignFooter
-		} else {
-			vAlign = cfg.VAlign
-		}
-	}
-	if vAlign == text.VAlignDefault {
-		if hint.isHeaderRow {
-			vAlign = t.style.Format.HeaderVAlign
-		} else if hint.isFooterRow {
-			vAlign = t.style.Format.FooterVAlign
-		} else {
-			vAlign = t.style.Format.RowVAlign
-		}
-	}
-	return vAlign
+	_ = "STUB: not implemented"
+	return *new(text.VAlign)
 }
 
-func (t *Table) hasHiddenColumns() bool {
-	for _, cc := range t.columnConfigMap {
-		if cc.Hidden {
-			return true
-		}
-	}
+func (t *Table) hasHiddenColumns() bool { _ = "STUB: not implemented"; return false }
+
+func (t *Table) hasRowPainter() bool { _ = "STUB: not implemented"; return false }
+
+func (t *Table) hideColumns() map[int]int { _ = "STUB: not implemented"; return nil }
+
+// hide columns as directed
+
+// reset numColumns to the new number of columns
+
+func (t *Table) isIndexColumn(colIdx int, hint renderHint) bool {
+	_ = "STUB: not implemented"
 	return false
 }
 
-func (t *Table) hasRowPainter() bool {
-	return t.rowPainter != nil || t.rowPainterWithAttributes != nil
-}
-
-func (t *Table) hideColumns() map[int]int {
-	colIdxMap := make(map[int]int)
-	numColumns := 0
-	hideColumnsInRows := func(rows []rowStr) []rowStr {
-		var rsp []rowStr
-		for _, row := range rows {
-			var rowNew rowStr
-			for colIdx, col := range row {
-				cc := t.columnConfigMap[colIdx]
-				if !cc.Hidden {
-					rowNew = append(rowNew, col)
-					colIdxMap[colIdx] = len(rowNew) - 1
-				}
-			}
-			if len(rowNew) > numColumns {
-				numColumns = len(rowNew)
-			}
-			rsp = append(rsp, rowNew)
-		}
-		return rsp
-	}
-
-	// hide columns as directed
-	t.rows = hideColumnsInRows(t.rows)
-	t.rowsFooter = hideColumnsInRows(t.rowsFooter)
-	t.rowsHeader = hideColumnsInRows(t.rowsHeader)
-
-	// reset numColumns to the new number of columns
-	t.numColumns = numColumns
-
-	return colIdxMap
-}
-
-func (t *Table) isIndexColumn(colIdx int, hint renderHint) bool {
-	return t.indexColumn == colIdx+1 || hint.isAutoIndexColumn
-}
-
-func (t *Table) render(out *strings.Builder) string {
-	outStr := out.String()
-	if t.suppressTrailingSpaces {
-		var trimmed []string
-		for _, line := range strings.Split(outStr, "\n") {
-			trimmed = append(trimmed, strings.TrimRightFunc(line, unicode.IsSpace))
-		}
-		outStr = strings.Join(trimmed, "\n")
-	}
-	if t.outputMirror != nil && len(outStr) > 0 {
-		_, _ = t.outputMirror.Write([]byte(outStr))
-		_, _ = t.outputMirror.Write([]byte("\n"))
-	}
-	return outStr
-}
+func (t *Table) render(out *strings.Builder) string { _ = "STUB: not implemented"; return "" }
 
 func (t *Table) shouldMergeCellsHorizontallyAbove(row rowStr, colIdx int, hint renderHint) bool {
-	if hint.isAutoIndexColumn || hint.isAutoIndexRow {
-		return false
-	}
-
-	rowConfig := t.getRowConfig(hint)
-	if hint.isSeparatorRow {
-		if hint.isHeaderRow && hint.rowNumber == 1 {
-			rowConfig = t.getRowConfig(hint)
-			row = t.getRow(hint.rowNumber-1, hint)
-		} else if hint.isFooterRow && hint.isFirstRow {
-			rowConfig = t.getRowConfig(renderHint{isLastRow: true, rowNumber: len(t.rows)})
-			row = t.getRow(len(t.rows)-1, renderHint{})
-		} else if hint.isFooterRow && hint.isBorderBottom {
-			row = t.getRow(len(t.rowsFooter)-1, renderHint{isFooterRow: true})
-		} else {
-			row = t.getRow(hint.rowNumber-1, hint)
-		}
-	}
-
-	if rowConfig.AutoMerge {
-		return row.areEqual(colIdx-1, colIdx)
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
 func (t *Table) shouldMergeCellsHorizontallyBelow(row rowStr, colIdx int, hint renderHint) bool {
-	if hint.isAutoIndexColumn || hint.isAutoIndexRow {
-		return false
-	}
-
-	var rowConfig RowConfig
-	if hint.isSeparatorRow {
-		if hint.isRegularRow() {
-			rowConfig = t.getRowConfig(renderHint{rowNumber: hint.rowNumber + 1})
-			row = t.getRow(hint.rowNumber, renderHint{})
-		} else if hint.isHeaderRow && hint.rowNumber == 0 {
-			rowConfig = t.getRowConfig(renderHint{isHeaderRow: true, rowNumber: 1})
-			row = t.getRow(0, hint)
-		} else if hint.isHeaderRow && hint.isLastRow {
-			rowConfig = t.getRowConfig(renderHint{rowNumber: 1})
-			row = t.getRow(0, renderHint{})
-		} else if hint.isHeaderRow {
-			rowConfig = t.getRowConfig(renderHint{isHeaderRow: true, rowNumber: hint.rowNumber + 1})
-			row = t.getRow(hint.rowNumber, hint)
-		} else if hint.isFooterRow && hint.rowNumber >= 0 {
-			rowConfig = t.getRowConfig(renderHint{isFooterRow: true, rowNumber: 1})
-			row = t.getRow(hint.rowNumber, renderHint{isFooterRow: true})
-		}
-	}
-
-	if rowConfig.AutoMerge {
-		return row.areEqual(colIdx-1, colIdx)
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
 func (t *Table) shouldMergeCellsVerticallyAbove(colIdx int, hint renderHint) bool {
-	if !t.firstRowOfPage && t.columnConfigMap[colIdx].AutoMerge && colIdx < t.numColumns {
-		if hint.isSeparatorRow {
-			rowPrev := t.getRow(hint.rowNumber-1, hint)
-			rowNext := t.getRow(hint.rowNumber, hint)
-			if colIdx < len(rowPrev) && colIdx < len(rowNext) {
-				return rowPrev[colIdx] == rowNext[colIdx]
-			}
-		} else {
-			rowPrev := t.getRow(hint.rowNumber-2, hint)
-			rowCurr := t.getRow(hint.rowNumber-1, hint)
-			if colIdx < len(rowPrev) && colIdx < len(rowCurr) {
-				return rowPrev[colIdx] == rowCurr[colIdx]
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
 func (t *Table) shouldMergeCellsVerticallyBelow(colIdx int, hint renderHint) int {
-	numRowsToMerge := 0
-	if t.columnConfigMap[colIdx].AutoMerge && colIdx < t.numColumns {
-		numRowsToMerge = 1
-		rowCurr := t.getRow(hint.rowNumber-1, hint)
-		for rowIdx := hint.rowNumber; rowIdx < len(t.rows); rowIdx++ {
-			rowNext := t.getRow(rowIdx, hint)
-			if colIdx < len(rowCurr) && colIdx < len(rowNext) && rowNext[colIdx] == rowCurr[colIdx] {
-				numRowsToMerge++
-			} else {
-				break
-			}
-		}
-	}
-	return numRowsToMerge
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (t *Table) shouldSeparateRows(rowIdx int, numRows int) bool {
+	_ = "STUB: not implemented"
 	// not asked to separate rows and no manually added separator
-	if !t.style.Options.SeparateRows && !t.separators[rowIdx] {
-		return false
-	}
-
-	pageSize := numRows
-	if t.pager.size > 0 {
-		pageSize = t.pager.size
-	}
-	if rowIdx%pageSize == pageSize-1 { // last row of page
-		return false
-	}
-	if rowIdx == numRows-1 { // last row of table
-		return false
-	}
-	return true
+	return false
 }
 
+// last row of page
+
+// last row of table
+
 func (t *Table) wrapRow(row rowStr) (int, rowStr) {
-	colMaxLines := 0
-	rowWrapped := make(rowStr, len(row))
-	for colIdx, colStr := range row {
-		widthEnforcer := t.columnConfigMap[colIdx].getWidthMaxEnforcer()
-		maxWidth := t.getColumnWidthMax(colIdx)
-		if maxWidth == 0 {
-			maxWidth = t.maxColumnLengths[colIdx]
-		}
-		rowWrapped[colIdx] = widthEnforcer(colStr, maxWidth)
-		colNumLines := strings.Count(rowWrapped[colIdx], "\n") + 1
-		if colNumLines > colMaxLines {
-			colMaxLines = colNumLines
-		}
-	}
-	return colMaxLines, rowWrapped
+	_ = "STUB: not implemented"
+	return 0, *new(rowStr)
 }

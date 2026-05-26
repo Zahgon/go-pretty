@@ -4,8 +4,4 @@ package table
 type PagerOption func(t *Table)
 
 // PageSize sets the size of each page rendered.
-func PageSize(pageSize int) PagerOption {
-	return func(t *Table) {
-		t.pager.size = pageSize
-	}
-}
+func PageSize(pageSize int) PagerOption { _ = "STUB: not implemented"; return *new(PagerOption) }

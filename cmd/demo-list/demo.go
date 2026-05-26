@@ -2,20 +2,12 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/list"
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
-func demoPrint(title string, content string, prefix string) {
-	fmt.Printf("%s:\n", title)
-	fmt.Println(strings.Repeat("-", len(title)+1))
-	for _, line := range strings.Split(content, "\n") {
-		fmt.Printf("%s%s\n", prefix, line)
-	}
-	fmt.Println()
-}
+func demoPrint(title string, content string, prefix string) { _ = "STUB: not implemented"; return }
 
 func main() {
 	//==========================================================================

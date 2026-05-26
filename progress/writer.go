@@ -48,6 +48,4 @@ type Writer interface {
 }
 
 // NewWriter initializes and returns a Writer.
-func NewWriter() Writer {
-	return &Progress{}
-}
+func NewWriter() Writer { _ = "STUB: not implemented"; return *new(Writer) }

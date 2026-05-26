@@ -18,26 +18,15 @@ type renderHint struct {
 	separatorType     separatorType
 }
 
-func (h *renderHint) isBorderOrSeparator() bool {
-	return h.isBorderTop || h.isSeparatorRow || h.isBorderBottom
-}
+func (h *renderHint) isBorderOrSeparator() bool { _ = "STUB: not implemented"; return false }
 
-func (h *renderHint) isRegularRow() bool {
-	return !h.isHeaderRow && !h.isFooterRow
-}
+func (h *renderHint) isRegularRow() bool { _ = "STUB: not implemented"; return false }
 
-func (h *renderHint) isRegularNonSeparatorRow() bool {
-	return !h.isHeaderRow && !h.isFooterRow && !h.isSeparatorRow
-}
+func (h *renderHint) isRegularNonSeparatorRow() bool { _ = "STUB: not implemented"; return false }
 
-func (h *renderHint) isHeaderOrFooterSeparator() bool {
-	return h.isSeparatorRow && !h.isBorderBottom && !h.isBorderTop &&
-		((h.isHeaderRow && !h.isLastRow) || (h.isFooterRow && (!h.isFirstRow || h.rowNumber > 0)))
-}
+func (h *renderHint) isHeaderOrFooterSeparator() bool { _ = "STUB: not implemented"; return false }
 
-func (h *renderHint) isLastLineOfLastRow() bool {
-	return h.isLastLineOfRow && h.isLastRow
-}
+func (h *renderHint) isLastLineOfLastRow() bool { _ = "STUB: not implemented"; return false }
 
 type renderMode string
 

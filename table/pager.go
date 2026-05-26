@@ -28,43 +28,14 @@ type pager struct {
 	size         int
 }
 
-func (p *pager) GoTo(pageNum int) string {
-	if pageNum < 1 {
-		pageNum = 1
-	}
-	if pageNum > len(p.pages) {
-		pageNum = len(p.pages)
-	}
-	p.index = pageNum - 1
-	return p.pages[p.index]
-}
+func (p *pager) GoTo(pageNum int) string { _ = "STUB: not implemented"; return "" }
 
-func (p *pager) Location() int {
-	return p.index + 1
-}
+func (p *pager) Location() int { _ = "STUB: not implemented"; return 0 }
 
-func (p *pager) Next() string {
-	if p.index < len(p.pages)-1 {
-		p.index++
-	}
-	return p.pages[p.index]
-}
+func (p *pager) Next() string { _ = "STUB: not implemented"; return "" }
 
-func (p *pager) Prev() string {
-	if p.index > 0 {
-		p.index--
-	}
-	return p.pages[p.index]
-}
+func (p *pager) Prev() string { _ = "STUB: not implemented"; return "" }
 
-func (p *pager) Render() string {
-	pageToWrite := p.pages[p.index]
-	if p.outputMirror != nil {
-		_, _ = p.outputMirror.Write([]byte(pageToWrite))
-	}
-	return pageToWrite
-}
+func (p *pager) Render() string { _ = "STUB: not implemented"; return "" }
 
-func (p *pager) SetOutputMirror(mirror io.Writer) {
-	p.outputMirror = mirror
-}
+func (p *pager) SetOutputMirror(mirror io.Writer) { _ = "STUB: not implemented"; return }

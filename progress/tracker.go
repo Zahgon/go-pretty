@@ -1,7 +1,6 @@
 package progress
 
 import (
-	"math"
 	"sync"
 	"time"
 )
@@ -51,237 +50,88 @@ type Tracker struct {
 
 // ETA returns the expected time of "arrival" or completion of this tracker. It
 // is an estimate and is not guaranteed.
-func (t *Tracker) ETA() time.Duration {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-
-	if t.timeStart.IsZero() {
-		return time.Duration(0)
-	}
-
-	timeTaken := time.Since(t.timeStart)
-	if t.ExpectedDuration > time.Duration(0) && t.ExpectedDuration > timeTaken {
-		return t.ExpectedDuration - timeTaken
-	}
-
-	pDone := int64(t.percentDoneWithoutLock())
-	if pDone == 0 {
-		return time.Duration(0)
-	}
-	eta := time.Duration((int64(timeTaken) / pDone) * (100 - pDone))
-	if eta < t.minETA {
-		eta = t.minETA
-	}
-	return eta
-}
+func (t *Tracker) ETA() time.Duration { _ = "STUB: not implemented"; return *new(time.Duration) }
 
 // Increment updates the current value of the task being tracked.
-func (t *Tracker) Increment(value int64) {
-	t.mutex.Lock()
-	t.incrementWithoutLock(value)
-	t.mutex.Unlock()
-}
+func (t *Tracker) Increment(value int64) { _ = "STUB: not implemented"; return }
 
 // IncrementWithError updates the current value of the task being tracked and
 // marks that an error occurred.
-func (t *Tracker) IncrementWithError(value int64) {
-	t.mutex.Lock()
-	t.incrementWithoutLock(value)
-	t.err = true
-	t.mutex.Unlock()
-}
+func (t *Tracker) IncrementWithError(value int64) { _ = "STUB: not implemented"; return }
 
 // IsStarted true if the tracker has started, false when using DeferStart
 // prior to Start, Increment, IncrementWithError or SetValue being called.
-func (t *Tracker) IsStarted() bool {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-
-	return !t.timeStart.IsZero()
-}
+func (t *Tracker) IsStarted() bool { _ = "STUB: not implemented"; return false }
 
 // IsDone returns true if the tracker is done (value has reached the expected
 // Total set during initialization).
-func (t *Tracker) IsDone() bool {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-
-	return t.done
-}
+func (t *Tracker) IsDone() bool { _ = "STUB: not implemented"; return false }
 
 // IsErrored true if an error was set with IncrementWithError or MarkAsErrored.
-func (t *Tracker) IsErrored() bool {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-
-	return t.err
-}
+func (t *Tracker) IsErrored() bool { _ = "STUB: not implemented"; return false }
 
 // IsIndeterminate returns true if the tracker is indeterminate; i.e., the total
 // is unknown and it is impossible to auto-calculate if tracking is done.
-func (t *Tracker) IsIndeterminate() bool {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-
-	return t.Total == 0
-}
+func (t *Tracker) IsIndeterminate() bool { _ = "STUB: not implemented"; return false }
 
 // MarkAsDone forces completion of the tracker by updating the current value as
 // the expected Total value.
-func (t *Tracker) MarkAsDone() {
-	t.mutex.Lock()
-	t.Total = t.value
-	t.stop()
-	t.mutex.Unlock()
-}
+func (t *Tracker) MarkAsDone() { _ = "STUB: not implemented"; return }
 
 // MarkAsErrored forces completion of the tracker by updating the current value as
 // the expected Total value, and recording as error.
 func (t *Tracker) MarkAsErrored() {
-	t.mutex.Lock()
+	_ = "STUB: not implemented"
+
 	// only update error if not done and if not previously set
-	if !t.done {
-		t.Total = t.value
-		t.err = true
-		t.stop()
-	}
-	t.mutex.Unlock()
+	return
 }
 
 // PercentDone returns the currently completed percentage value.
-func (t *Tracker) PercentDone() float64 {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-	return t.percentDoneWithoutLock()
-}
+func (t *Tracker) PercentDone() float64 { _ = "STUB: not implemented"; return 0 }
 
-func (t *Tracker) percentDoneWithoutLock() float64 {
-	if t.Total == 0 {
-		return 0
-	}
-	return float64(t.value) * 100.0 / float64(t.Total)
-}
+func (t *Tracker) percentDoneWithoutLock() float64 { _ = "STUB: not implemented"; return 0 }
 
 // Reset resets the tracker to its initial state.
-func (t *Tracker) Reset() {
-	t.mutex.Lock()
-	t.done = false
-	t.err = false
-	t.timeStart = time.Time{}
-	t.timeStop = time.Time{}
-	t.value = 0
-	t.mutex.Unlock()
-}
+func (t *Tracker) Reset() { _ = "STUB: not implemented"; return }
 
 // SetValue sets the value of the tracker and re-calculates if the tracker is
 // "done".
-func (t *Tracker) SetValue(value int64) {
-	t.mutex.Lock()
-	t.done = false
-	t.timeStop = time.Time{}
-	t.value = 0
-	t.incrementWithoutLock(value)
-	t.mutex.Unlock()
-}
+func (t *Tracker) SetValue(value int64) { _ = "STUB: not implemented"; return }
 
 // Start starts the tracking for the case when DeferStart=false.
-func (t *Tracker) Start() {
-	if t.timeStart.IsZero() {
-		t.start()
-	}
-}
+func (t *Tracker) Start() { _ = "STUB: not implemented"; return }
 
 // UpdateMessage updates the message string.
-func (t *Tracker) UpdateMessage(msg string) {
-	t.mutex.Lock()
-	t.Message = msg
-	t.mutex.Unlock()
-}
+func (t *Tracker) UpdateMessage(msg string) { _ = "STUB: not implemented"; return }
 
 // UpdateTotal updates the total value.
-func (t *Tracker) UpdateTotal(total int64) {
-	t.mutex.Lock()
-	if total > t.Total {
-		t.done = false
-	}
-	t.Total = total
-	t.mutex.Unlock()
-}
+func (t *Tracker) UpdateTotal(total int64) { _ = "STUB: not implemented"; return }
 
 // Value returns the current value of the tracker.
-func (t *Tracker) Value() int64 {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-	return t.value
-}
+func (t *Tracker) Value() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (t *Tracker) incrementWithoutLock(value int64) {
-	if !t.done {
-		if t.timeStart.IsZero() {
-			t.startWithoutLock()
-		}
-		t.value += value
-		if !t.AutoStopDisabled && t.Total > 0 && t.value >= t.Total {
-			t.stop()
-		}
-	}
-}
+func (t *Tracker) incrementWithoutLock(value int64) { _ = "STUB: not implemented"; return }
 
-func (t *Tracker) message() string {
-	t.mutex.RLock()
-	defer t.mutex.RUnlock()
-	return t.Message
-}
+func (t *Tracker) message() string { _ = "STUB: not implemented"; return "" }
 
-func (t *Tracker) start() {
-	t.mutex.Lock()
-	t.startWithoutLock()
-	t.mutex.Unlock()
-}
+func (t *Tracker) start() { _ = "STUB: not implemented"; return }
 
-func (t *Tracker) startWithoutLock() {
-	if t.Total < 0 {
-		t.Total = math.MaxInt64
-	}
-	t.done = false
-	t.err = false
-	t.timeStart = time.Now()
-}
+func (t *Tracker) startWithoutLock() { _ = "STUB: not implemented"; return }
 
 // this must be called with the mutex held with a write lock
-func (t *Tracker) stop() {
-	t.done = true
-	t.timeStop = time.Now()
-	if t.value > t.Total {
-		t.Total = t.value
-	}
-}
+func (t *Tracker) stop() { _ = "STUB: not implemented"; return }
 
-func (t *Tracker) valueAndTotal() (int64, int64) {
-	t.mutex.RLock()
-	value := t.value
-	total := t.Total
-	t.mutex.RUnlock()
-	return value, total
-}
+func (t *Tracker) valueAndTotal() (int64, int64) { _ = "STUB: not implemented"; return 0, 0 }
 
 // timeStartStopAndDone returns timeStart, timeStop, and done under a single
 // RLock so callers see a consistent snapshot — needed because an active→done
 // transition between separate reads would yield a non-zero timeStart with a
 // zero timeStop while done is true, breaking timeStop.Sub(timeStart).
 func (t *Tracker) timeStartStopAndDone() (time.Time, time.Time, bool) {
-	t.mutex.RLock()
-	timeStart := t.timeStart
-	timeStop := t.timeStop
-	done := t.done
-	t.mutex.RUnlock()
-	return timeStart, timeStop, done
+	_ = "STUB: not implemented"
+	return *new(time.Time), *new(time.Time), false
 }
 
 // timeStartValue returns the start time safely.
-func (t *Tracker) timeStartValue() time.Time {
-	t.mutex.RLock()
-	timeStart := t.timeStart
-	t.mutex.RUnlock()
-	return timeStart
-}
+func (t *Tracker) timeStartValue() time.Time { _ = "STUB: not implemented"; return *new(time.Time) }

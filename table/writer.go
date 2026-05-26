@@ -45,6 +45,4 @@ type Writer interface {
 }
 
 // NewWriter initializes and returns a Writer.
-func NewWriter() Writer {
-	return &Table{}
-}
+func NewWriter() Writer { _ = "STUB: not implemented"; return *new(Writer) }

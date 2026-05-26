@@ -25,19 +25,8 @@ var (
 )
 
 func profileRender(profiler func(profile2 *profile.Profile), n int) {
-	defer profile.Start(profiler, profile.ProfilePath(".")).Stop()
-
-	for i := 0; i < n; i++ {
-		tw := table.NewWriter()
-		tw.AppendHeader(tableRowHeader)
-		tw.AppendRows(tableRows)
-		tw.AppendFooter(tableRowFooter)
-		tw.SetCaption(tableCaption)
-		tw.Render()
-		tw.RenderCSV()
-		tw.RenderHTML()
-		tw.RenderMarkdown()
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

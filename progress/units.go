@@ -1,9 +1,5 @@
 package progress
 
-import (
-	"fmt"
-)
-
 // UnitsNotationPosition determines notation position relative to unit value.
 type UnitsNotationPosition int
 
@@ -25,20 +21,9 @@ type Units struct {
 }
 
 // Sprint prints the value as defined by the Units.
-func (tu Units) Sprint(value int64) string {
-	formatter := tu.Formatter
-	if formatter == nil {
-		formatter = FormatNumber
-	}
+func (tu Units) Sprint(value int64) string { _ = "STUB: not implemented"; return "" }
 
-	formattedValue := formatter(value)
-	switch tu.NotationPosition {
-	case UnitsNotationPositionAfter:
-		return formattedValue + tu.Notation
-	default: // UnitsNotationPositionBefore
-		return tu.Notation + formattedValue
-	}
-}
+// UnitsNotationPositionBefore
 
 var (
 	// UnitsDefault doesn't define any units. The value will be treated as any
@@ -86,28 +71,10 @@ var (
 )
 
 // FormatBytes formats the given value as a "Byte".
-func FormatBytes(value int64) string {
-	return formatNumber(value, map[int64]string{
-		1000000000000000: "PB",
-		1000000000000:    "TB",
-		1000000000:       "GB",
-		1000000:          "MB",
-		1000:             "KB",
-		0:                "B",
-	})
-}
+func FormatBytes(value int64) string { _ = "STUB: not implemented"; return "" }
 
 // FormatNumber formats the given value as a "regular number".
-func FormatNumber(value int64) string {
-	return formatNumber(value, map[int64]string{
-		1000000000000000: "Q",
-		1000000000000:    "T",
-		1000000000:       "B",
-		1000000:          "M",
-		1000:             "K",
-		0:                "",
-	})
-}
+func FormatNumber(value int64) string { _ = "STUB: not implemented"; return "" }
 
 var unitScales = []int64{
 	1000000000000000,
@@ -118,10 +85,6 @@ var unitScales = []int64{
 }
 
 func formatNumber(value int64, notations map[int64]string) string {
-	for _, unitScale := range unitScales {
-		if value >= unitScale {
-			return fmt.Sprintf("%.2f%s", float64(value)/float64(unitScale), notations[unitScale])
-		}
-	}
-	return fmt.Sprintf("%d%s", value, notations[0])
+	_ = "STUB: not implemented"
+	return ""
 }
